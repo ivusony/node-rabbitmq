@@ -2,4 +2,4 @@
 
 npm install
 
-node listener.js
+node app/listener.js

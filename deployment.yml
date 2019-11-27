@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: ms-listener
+    labels:
+        app: ms-listener
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: ms-listener
+    template:
+        metadata:
+            labels:
+                app: ms-listener
+        spec:
+            containers:
+                - name: ms-listener
+                  image: gitlab.sattrakt.net:5001/f1/ms-listener:1.0
+                  ports:
+                    - containerPort: 9000
+            imagePullSecrets:
+                - name: gitlab-registry
