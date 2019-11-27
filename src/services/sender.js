@@ -1,7 +1,7 @@
 const AMQP = require('amqplib/callback_api');
 
 // const CONN_URL = "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh";
-const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@rabbit-mq-rabbitmq-ha.rabbitmq-system.svc.svc.cluster.local:30005"
+const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@rabbit-mq-rabbitmq-ha.rabbitmq-system.svc.svc.cluster.local:5672"
 
 
 var CH = null;

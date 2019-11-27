@@ -16,9 +16,9 @@ LISTENER.on('connection', function(socket){
     socket.on(
         "data", 
         function(data){
-            //converting received bytes to string
+            //converting received bytes to stringcd ..
             // console.log(data.toString());
-            console.log(data);
+            // console.log(data);
             SEND_TO_QUEUE('f1-listener', data.toString())
         }
     );
