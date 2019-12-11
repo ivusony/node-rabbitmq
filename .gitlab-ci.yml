@@ -1,5 +1,6 @@
 stages:
     - build
+    - deploy
 
 variables:
     IMAGE: gitlab.sattrakt.net:5001/f1/ms-listener:1.0
@@ -22,7 +23,7 @@ build:
 
 deploy:
     only:
-        - master
+        - test
     image: gitlab.sattrakt.net:5001/images/kubectl:1.16
     services:
         - docker:dind
