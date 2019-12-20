@@ -5,26 +5,36 @@ const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@rabbit-mq-rabbitmq-ha.ra
 
 
 var CH = null;
+var exchange = "f1-listener"
 
+//connect to remote rabbitmq
 AMQP.connect(CONN_URL, function(err, connection){
+    console.log('Connected to: ' + connection.connection.stream._host);
+    //create streaming channel
     connection.createChannel(function(err, channel){
-        // console.log(channel);
         CH = channel;
+        
+        //create exchange
+        CH.assertExchange(exchange, 'fanout', {
+            durable: false
+        });
+
     });
 });
 
 process.on('exit', function () {
     CH.close();
-    console.log("Closing RMQ channel");
+    console.log("Closing...");
 })
 
 process.on("error", function(err){
     console.log(err);
 })
 
-const sendToQueue = async function (queueName, data){
-    CH.sendToQueue(queueName, new Buffer.from(data));
+const SEND_TO_EXCHANGE = async function (data){
+    //publish message to exchange
+    await CH.publish(exchange, '', new Buffer.from(data));
 }
 
 
-module.exports = sendToQueue;
+module.exports = SEND_TO_EXCHANGE;
