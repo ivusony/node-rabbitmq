@@ -3,10 +3,10 @@ const AMQP = require('amqplib/callback_api');
 // const CONN_URL = "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh";
 const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
 
-AMQP.connect(CONN_URL, function (err, CONNECTION) {
+AMQP.connect(CONN_URL, (err, CONNECTION) => {
 
-    console.log('Consumer connected to: ' + CONNECTION.connection.stream._host);;
-    CONNECTION.createChannel(function (err, channel) {
+    console.log('F1 test consumer connected to: ' + CONNECTION.connection.stream._host);;
+    CONNECTION.createChannel((err, channel) => {
 
         var exchange = 'f1-listener';
 
@@ -22,20 +22,20 @@ AMQP.connect(CONN_URL, function (err, CONNECTION) {
                 // durable: if true, the queue will survive broker restarts, modulo the effects of exclusive and autoDelete
                 durable     : true
             }, 
-            function (err, ASSERTED_TEMP_QUEUE) {
+            (err, ASSERTED_TEMP_QUEUE) => {
                 if (err) 
                 {
                     throw err;
                 }
-                console.log("Temp queue: " + ASSERTED_TEMP_QUEUE.queue);
                 // Assert a routing path from an exchange to a queue: 
                 // the exchange named by source will relay messages to the queue named, according to the type of the exchange and the pattern given. 
+                console.log(`Binding temp queue: ${ASSERTED_TEMP_QUEUE.queue} to exhange: ${exchange}`);
                 channel.bindQueue(ASSERTED_TEMP_QUEUE.queue, exchange, '');
 
                 // pull messages from the temp queue which is binded to exchange
-                channel.consume(ASSERTED_TEMP_QUEUE.queue, function (msg) {
+                channel.consume(ASSERTED_TEMP_QUEUE.queue, (msg) => {
                     if (msg.content) {
-                        console.log( msg.content.toString());
+                        console.log(`Message received : ${msg.content.toString()}` );
                     }
                 }, {
                     noAck: true
