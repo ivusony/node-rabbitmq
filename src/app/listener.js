@@ -1,50 +1,55 @@
-const   NET_MODULE  = require('net');
-const   PORT        = 9000;
-const   CRC         = require('crc');
-const   SEND_TO_EXCHANGE      = require('../services/sender');
+const   NET_MODULE          = require('net');
+const   PORT                = 9000;
+const   CRC                 = require('crc');
 
+// importing sender function
+const   SEND_TO_EXCHANGE    = require('../services/sender');
+const   CONNECTED_CLIENTS   = [];
 
-//creating server
-const LISTENER =  NET_MODULE.createServer();
+// creating server / listener
+const   SERVER              =  NET_MODULE.createServer();
 
-LISTENER.on('connection', function(socket){
-    var CLIENT = 
+// on client connection event
+SERVER.on('connection', function(CLIENT){
+    // console.log(CLIENT);
+    var NEW_CLIENT = 
     {
-        ADDRESS : socket.remoteAddress,
-        PORT    : socket.remotePort
+        ADDRESS : CLIENT.remoteAddress,
+        PORT    : CLIENT.remotePort,
     }
+    // CONNECTED_CLIENTS.push(NEW_CLIENT);
+
+    console.log(`New connection from ${NEW_CLIENT.ADDRESS}:${NEW_CLIENT.PORT}`);
+    console.log('Connected clients: ' + CONNECTED_CLIENTS.length); 
     
-    console.log(`New connection from ${CLIENT.ADDRESS}:${CLIENT.PORT}`);
-    
-    
-    socket.on(
+    CLIENT.on(
         "data", 
         function(data){
-          SEND_TO_EXCHANGE(data.toString())
+            //(the name of the exhange and the actual data to be sent)
+            SEND_TO_EXCHANGE("f1-listener", data.toString());
         }
     );
 
-    socket.once(
+    CLIENT.on(
         "close", 
         function(){
             console.log("Connection closed")
         }
     )
 
-    socket.on(
+    CLIENT.on(
         "error", 
         function(err){
             console.log(err);
         }
     )
-
-   
+  
 });
 
-LISTENER.on('error', function(err){
+SERVER.on('error', function(err){
     throw err;
 });
 
-LISTENER.listen(PORT, () => {
+SERVER.listen(PORT, () => {
     console.log("Listening on port " + PORT);
 });
