@@ -19,28 +19,32 @@ SERVER.on('connection', function(CLIENT){
     }
     // CONNECTED_CLIENTS.push(NEW_CLIENT);
 
+    console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
     console.log(`New connection from ${NEW_CLIENT.ADDRESS}:${NEW_CLIENT.PORT}`);
-    console.log('Connected clients: ' + CONNECTED_CLIENTS.length); 
+    // console.log('Connected clients: ' + CONNECTED_CLIENTS.length); 
     
     CLIENT.on(
         "data", 
         function(data){
             //(the name of the exhange and the actual data to be sent)
-            SEND_TO_EXCHANGE("f1-listener", data.toString());
+            SEND_TO_EXCHANGE("f1-listener", data.toString(), function(){
+                console.log('Message sent. Closing connection.......');
+            });
         }
     );
 
     CLIENT.on(
         "close", 
         function(){
-            console.log("Connection closed")
+            console.log(`Connection from ${NEW_CLIENT.ADDRESS}:${NEW_CLIENT.PORT} CLOSED`);
+            console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
         }
     )
 
     CLIENT.on(
         "error", 
         function(err){
-            console.log(err);
+            throw err;
         }
     )
   
@@ -51,5 +55,5 @@ SERVER.on('error', function(err){
 });
 
 SERVER.listen(PORT, () => {
-    console.log("Listening on port " + PORT);
+    console.log("F1 listener listening for incoming messages on port " + PORT);
 });

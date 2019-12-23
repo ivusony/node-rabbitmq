@@ -2,20 +2,40 @@ const AMQP = require('amqplib/callback_api');
 
 // const CONN_URL = "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh";
 const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
-
-
+//declaring channel in global and setting it to null
 var CH  = null;
 
-//connect to remote rabbitmq server
-AMQP.connect(CONN_URL, function(err, connection){
-    console.log('Sender connected to: ' + connection.connection.stream._host);
-    //create streaming channel
-    connection.createChannel(function(err, channel){
-        CH = channel;
-    });
-});
+try{
+    //connect to remote rabbitmq server
+    AMQP.connect(CONN_URL, function (err, connection) {
+        if(err)
+        {
+            throw err;
+        }
+        console.log('F1 listener successfully connected to: ' + connection.connection.stream._host);
+        try {
+            //create streaming channel
+            connection.createChannel(function (err, channel) {
+                if (err) {
+                    throw err
+                }
+                console.log('Streaming channel established. Waiting for messages.');
 
-const SEND_TO_EXCHANGE = async function (exhange_name, data){
+                CH = channel;
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    });
+}
+catch(err)
+{
+    console.log(err);
+}
+
+
+const SEND_TO_EXCHANGE = async function (exhange_name, data, cb){
     //create exchange
     await CH.assertExchange(
         exhange_name, 
@@ -30,6 +50,8 @@ const SEND_TO_EXCHANGE = async function (exhange_name, data){
         '', 
         new Buffer.from(data)
     );
+
+    cb();
 }
 
 
