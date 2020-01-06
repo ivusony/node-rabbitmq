@@ -14,10 +14,10 @@ const   SENDER              = require('../services/sender');
 // returns an async function
 const   SEND_TO_EXCHANGE = SENDER(
             {
-                // harpia.sattrakt.net RMQ
+                // cloud test rmq
                 // RMQ_URL: "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh"
-                // RMQ_URL: 'amqp://rabbit-mq-rabbitmq-ha.rabbitmq-system.svc.svc.cluster.local:5672'
-                RMQ_URL: "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@rabbit-mq-rabbitmq-ha.rabbitmq-system.svc.svc.cluster.local:5672"
+                // harpia.sattrakt.net RMQ
+                RMQ_URL: "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
             }
         );
 
