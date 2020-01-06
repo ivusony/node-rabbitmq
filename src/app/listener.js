@@ -15,7 +15,9 @@ const   SENDER              = require('../services/sender');
 const   SEND_TO_EXCHANGE = SENDER(
             {
                 // harpia.sattrakt.net RMQ
-                RMQ_URL: "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
+                // RMQ_URL: "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh"
+                // RMQ_URL: 'amqp://rabbit-mq-rabbitmq-ha.rabbitmq-system.svc.svc.cluster.local:5672'
+                RMQ_URL: "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@rabbit-mq-rabbitmq-ha.rabbitmq-system.svc.svc.cluster.local:5672"
             }
         );
 
