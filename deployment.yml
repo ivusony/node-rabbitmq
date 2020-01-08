@@ -17,6 +17,7 @@ spec:
             containers:
                 - name: ms-listener
                   image: gitlab.sattrakt.net:5001/f1/ms-listener:1.0
+                  imagePullPolicy: "Always"
                   ports:
                     - containerPort: 9000
             imagePullSecrets:
