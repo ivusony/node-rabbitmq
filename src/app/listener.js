@@ -58,8 +58,6 @@ SERVER.on(
                     // lets assume it is
 
                     CLIENT.write(`{"imei":"${device_IMEI}"}`)
-
-
                 }
                 else{
                     // if byte length is more than 17
