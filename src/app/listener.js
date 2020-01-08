@@ -60,6 +60,19 @@ SERVER.on(
                     // if byte length is more than 17
                     // device is sending data
                     console.log(data);
+
+
+                    SEND_TO_EXCHANGE(
+                        "f1-listener", 
+                        //buffer to string
+                        data, 
+                        (data_sent) => {
+                            console.log(`Message sent is below:`);
+                            console.log(data_sent);
+                            console.log('To string:' + data_sent);
+                            console.log('Closing connection.......');
+                        }
+                    );
                 }
 
                 //PARSER
@@ -80,17 +93,6 @@ SERVER.on(
                 // }
                 
 
-                // SEND_TO_EXCHANGE(
-                //     "f1-listener", 
-                //     //buffer to string
-                //     data, 
-                //     (data_sent) => {
-                //         console.log(`Message sent is below:`);
-                //         console.log(data_sent);
-                //         console.log('To string:' + data_sent);
-                //         console.log('Closing connection.......');
-                //     }
-                // );
             }
         );
 
