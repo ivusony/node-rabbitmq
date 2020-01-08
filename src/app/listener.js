@@ -1,6 +1,8 @@
 const   NET_MODULE          = require('net');
 const   PORT                = 9000;
 const   CRC                 = require('crc');
+const   Parser              = require('teltonika-parser');
+const   binutils            = require('binutils64');
 const   CONNECTED_CLIENTS   = [];
 
 // creating server / listener
@@ -38,16 +40,57 @@ SERVER.on(
         CLIENT.on(
             "data", 
             data => {
+                console.log(data);
+                console.log(data.byteLength);
                 //(the name of the exhange, data to be sent, cb)
-                SEND_TO_EXCHANGE(
-                    "f1-listener", 
-                    //buffer to string
-                    data.toString(), 
-                    (data_sent) => {
-                        console.log(`Message sent: ${data_sent}`);
-                        console.log('Closing connection.......');
-                    }
-                );
+
+
+                //check if IMEI
+
+                if(data.byteLength <= 17)
+                {
+                    //check if device is auth
+                    // lets assume it is
+
+                    CLIENT.write(`{"imei":"${data}"}`)
+
+
+                }
+                else{
+                    // if byte length is more than 17
+                    // device is sending data
+                    console.log(data);
+                }
+
+                //PARSER
+                // let buffer = data;
+                // let parser = new Parser(buffer);
+                
+                // if(parser.isImei){
+                //     CLIENT.write(Buffer.alloc(1,1));
+                // }
+                // else{
+                //     let avl = parser.getAvl();
+
+                //     let writer = new binutils.BinaryWriter();
+                //     writer.WriteInt32(avl.number_of_data);
+
+                //     let response = writer.ByteBuffer; 
+                //     CLIENT.write(response);
+                // }
+                
+
+                // SEND_TO_EXCHANGE(
+                //     "f1-listener", 
+                //     //buffer to string
+                //     data, 
+                //     (data_sent) => {
+                //         console.log(`Message sent is below:`);
+                //         console.log(data_sent);
+                //         console.log('To string:' + data_sent);
+                //         console.log('Closing connection.......');
+                //     }
+                // );
             }
         );
 
