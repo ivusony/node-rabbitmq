@@ -1,8 +1,6 @@
 const   NET_MODULE          = require('net');
 const   PORT                = 9000;
 const   CRC                 = require('crc');
-const   Parser              = require('teltonika-parser');
-const   binutils            = require('binutils64');
 const   CONNECTED_CLIENTS   = [];
 
 // creating server / listener
@@ -41,34 +39,19 @@ SERVER.on(
             "data", 
             data => {
                 console.log(data);
-                console.log(data.byteLength);
 
-                //check if IMEI
-
-                if (data.byteLength <= 17)
+                // check if device is trying to authenticate
+                if(isDeviceAuthenticating(data))
                 {
-
-                    var IMEI_raw     = data.toString();
+                    var IMEI_raw = data.toString();
                     var device_IMEI = IMEI_raw.substring(2);
 
-                        console.log(device_IMEI);
-
-                //(the name of the exhange, data to be sent, cb)
-                    //check if device is auth
-                    // lets assume it is
-
-                    CLIENT.write(`{"imei":"${device_IMEI}"}`)
-                }
-                else{
-                    // if byte length is more than 17
-                    // device is sending data
-                    console.log(data);
-
-
+                    CLIENT.write(new Buffer([0x01]))
+                }else{
                     SEND_TO_EXCHANGE(
-                        "f1-listener", 
+                        "f1-listener",
                         //buffer to string
-                        data, 
+                        data,
                         (data_sent) => {
                             console.log(`Message sent is below:`);
                             console.log(data_sent);
@@ -77,6 +60,22 @@ SERVER.on(
                         }
                     );
                 }
+
+              
+
+                
+
+
+                function isDeviceAuthenticating(device_payload){
+                    // https://wiki.teltonika.lt/view/Codec
+                    // when module connects to server, module sends its IMEI. First comes short identifying number of bytes written and then goes IMEI as text (bytes). 
+                    // First two bytes denote IMEI length.
+                    var first_two_Bytes= data.slice(0, 2).toString('hex');
+                    var int = parseInt(first_two_Bytes, 16);
+                    // return true if first two bytes (IMEI length) is greater than 0
+                    return int > 0
+                }
+
 
                 //PARSER
                 // let buffer = data;
