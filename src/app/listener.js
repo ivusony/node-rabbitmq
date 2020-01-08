@@ -42,17 +42,22 @@ SERVER.on(
             data => {
                 console.log(data);
                 console.log(data.byteLength);
-                //(the name of the exhange, data to be sent, cb)
-
 
                 //check if IMEI
 
-                if(data.byteLength <= 17)
+                if (data.byteLength <= 17)
                 {
+
+                    var IMEI_raw     = data.toString();
+                    var device_IMEI = IMEI_raw.substring(2);
+
+                        console.log(device_IMEI);
+
+                //(the name of the exhange, data to be sent, cb)
                     //check if device is auth
                     // lets assume it is
 
-                    CLIENT.write(`{"imei":"${data}"}`)
+                    CLIENT.write(`{"imei":"${device_IMEI}"}`)
 
 
                 }
