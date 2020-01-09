@@ -48,10 +48,10 @@ SERVER.on(
 
                  var decoded_data = decoded.decode_AVL();
 
+                console.log(decoded_data.number_of_data2)
+                var length = new Buffer.from([decoded_data.number_of_data2]);
 
-                var length = decoded_data.number_of_data2;
-
-                console.log(length);
+                
 
 
                 // check if device is trying to authenticate
@@ -77,7 +77,8 @@ SERVER.on(
                         }
                     );
 
-                    CLIENT.write(new Buffer.from([0x13]));
+
+                    CLIENT.write(length);
                    
 
                 }
