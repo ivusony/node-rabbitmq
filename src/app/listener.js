@@ -1,11 +1,13 @@
-const   NET_MODULE          = require('net');
-const   PORT                = 9000;
-const   CRC                 = require('crc');
-const   CONNECTED_CLIENTS   = [];
+const   NET_MODULE              = require('net');
+const   PORT                    = 9000;
+
+const   CONNECTED_CLIENTS       = [];
+
+const   TCP_DECODER = require('../services/tcpdecoder');
 
 // creating server / listener
-const   SERVER              = NET_MODULE.createServer();
-const   SENDER              = require('../services/sender');
+const   SERVER                  = NET_MODULE.createServer();
+const   SENDER                  = require('../services/sender');
 
 // stingray RMQ servise url for testing purposes
 // "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh"
@@ -34,69 +36,59 @@ SERVER.on(
 
         console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
         console.log(`New connection from ${NEW_CLIENT.ADDRESS}:${NEW_CLIENT.PORT}`);
-        
+
+    
+
         CLIENT.on(
             "data", 
             data => {
-                console.log(data);
+
+              
+                var decoded = new TCP_DECODER(data);
+
+                 var decoded_data = decoded.decode_AVL();
+
+
+                var length = decoded_data.data_length;
+
+                console.log(length);
+
 
                 // check if device is trying to authenticate
-                if(isDeviceAuthenticating(data))
+                if(decoded.isDeviceAuthenticating())
                 {
                     var IMEI_raw = data.toString();
                     var device_IMEI = IMEI_raw.substring(2);
 
-                    CLIENT.write(new Buffer([0x01]))
-                }else{
+                    //send 1 if allowed
+                    CLIENT.write(new Buffer.from([0x01]));
+
+                }else{                    
+
                     SEND_TO_EXCHANGE(
                         "f1-listener",
                         //buffer to string
                         data,
                         (data_sent) => {
                             console.log(`Message sent is below:`);
-                            console.log(data_sent);
-                            console.log('To string:' + data_sent);
+                            // console.log(decoded_data);
+                            // console.log('To string:' + data_sent);
                             console.log('Closing connection.......');
                         }
                     );
+
+                    CLIENT.write(new Buffer.from([length], 'binary'));
+                   
+
                 }
 
-              
-
-                
-
-
-                function isDeviceAuthenticating(device_payload){
-                    // https://wiki.teltonika.lt/view/Codec
-                    // when module connects to server, module sends its IMEI. First comes short identifying number of bytes written and then goes IMEI as text (bytes). 
-                    // First two bytes denote IMEI length.
-                    var first_two_Bytes= data.slice(0, 2).toString('hex');
-                    var int = parseInt(first_two_Bytes, 16);
-                    // return true if first two bytes (IMEI length) is greater than 0
-                    return int > 0
-                }
-
-
-                //PARSER
-                // let buffer = data;
-                // let parser = new Parser(buffer);
-                
-                // if(parser.isImei){
-                //     CLIENT.write(Buffer.alloc(1,1));
-                // }
-                // else{
-                //     let avl = parser.getAvl();
-
-                //     let writer = new binutils.BinaryWriter();
-                //     writer.WriteInt32(avl.number_of_data);
-
-                //     let response = writer.ByteBuffer; 
-                //     CLIENT.write(response);
-                // }
-                
 
             }
         );
+
+        CLIENT.on('end', ()=>{
+          CLIENT.end();
+        })
 
         CLIENT.on(
             "close", 
