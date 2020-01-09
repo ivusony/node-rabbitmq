@@ -10,7 +10,7 @@ module.exports = options => {
             if (err) {
                 throw err;
             }
-            console.log('F1 listener successfully connected to: ' + connection.connection.stream._host);
+            console.log('F1 listener AMQP service successfully connected to: ' + connection.connection.stream._host);
             try {
                 //create streaming channel
                 connection.createChannel((err, channel) => {
@@ -59,9 +59,9 @@ module.exports = options => {
         await CH.publish(
             exhange_name,
             '',
-            new Buffer.from(data)
+            new Buffer.from(data, "binary")
         );
         //run callback
-        cb(data.substring(0, 10) + '...');
+        cb(data);
     }
 }

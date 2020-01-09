@@ -1,5 +1,7 @@
 const AMQP = require('amqplib/callback_api');
 
+const TCP_DECODER = require('../services/tcpdecoder');
+
 // const CONN_URL = "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh";
 const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
 
@@ -34,8 +36,15 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
 
                 // pull messages from the temp queue which is binded to exchange
                 channel.consume(ASSERTED_TEMP_QUEUE.queue, (msg) => {
-                    if (msg.content) {
-                        console.log(`Message received : ${msg.content.toString()}` );
+                    if (msg) {
+                        // console.log(`Message received below:`);
+                        // console.log(msg.content);
+                       
+
+                        var decoder = new TCP_DECODER(msg.content);
+
+                        console.log(decoder.decode_AVL());
+            
                     }
                 }, {
                     noAck: true
