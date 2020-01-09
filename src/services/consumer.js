@@ -45,7 +45,7 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
 
                         var decoder = new TCP_DECODER(msg.content);
 
-                        fs.writeFile('../test/data.json', JSON.stringify(decoder.decode_AVL()) + ',' , function(err) {
+                        fs.writeFile('../test/data.json', JSON.stringify(decoder.decode_AVL()) , function(err) {
                             if(err)
                             {
                                 return console.log(err);

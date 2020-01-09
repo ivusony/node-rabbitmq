@@ -77,7 +77,7 @@ SERVER.on(
                         }
                     );
 
-                    CLIENT.write(new Buffer.from([length], 'binary'));
+                    CLIENT.write(new Buffer.from([0x13]));
                    
 
                 }
