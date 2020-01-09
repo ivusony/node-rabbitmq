@@ -49,7 +49,7 @@ SERVER.on(
                  var decoded_data = decoded.decode_AVL();
 
 
-                var length = decoded_data.data_length;
+                var length = decoded_data.number_of_data2;
 
                 console.log(length);
 
@@ -77,7 +77,7 @@ SERVER.on(
                         }
                     );
 
-                    CLIENT.write(new Buffer.from([length], 'binary'));
+                    CLIENT.write(new Buffer.from([length]));
                    
 
                 }

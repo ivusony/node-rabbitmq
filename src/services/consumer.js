@@ -2,6 +2,8 @@ const AMQP = require('amqplib/callback_api');
 
 const TCP_DECODER = require('../services/tcpdecoder');
 
+const fs = require('fs');
+
 // const CONN_URL = "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh";
 const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
 
@@ -43,7 +45,14 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
 
                         var decoder = new TCP_DECODER(msg.content);
 
-                        console.log(decoder.decode_AVL());
+                        fs.appendFile('../test/data.json', JSON.stringify(decoder.decode_AVL()) + ',' , function(err) {
+                            if(err)
+                            {
+                                return console.log(err);
+                            }
+                            console.log('Data received. Data.json appended');
+                        })
+                        // console.log(decoder.decode_AVL());
             
                     }
                 }, {

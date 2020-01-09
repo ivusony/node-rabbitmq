@@ -21,8 +21,7 @@ class TCP_DECODER {
 
     data_length = () => {
         var data =  this.decode_AVL(this.hex_data);
-
-        return data.data_length
+        return data.number_of_data2
     }
 
     hex2a = (hexx) => {
