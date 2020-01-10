@@ -54,12 +54,12 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
                             var data = decoder.decode_AVL(),
                                 timestamps = [];
 
-                            data.records.forEach(record => {
-                                timestamps.push(record.timestamp)
-                            })
+                            // data.records.forEach(record => {
+                            //     timestamps.push(record.timestamp)
+                            // })
 
-                            console.log(`${Date.now()} => Received ${data.records.length} records, with following timestamps: `);
-                            console.log(timestamps);
+                            console.log("Teltonika FMB140 record:");
+                            console.log(data);
                         })
                         // console.log(decoder.decode_AVL());
 

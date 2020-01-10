@@ -41,6 +41,7 @@ SERVER.on(
         CLIENT.on(
             "data", 
             data => {
+                var IMEI = undefined;
                 var decoded         = new TCP_DECODER(data),
                     decoded_data    = decoded.decode_AVL();
                 // the data record array length preceded by 3 bytes of zero
@@ -51,6 +52,7 @@ SERVER.on(
                 {
                     var IMEI_raw = data.toString();
                     var device_IMEI = IMEI_raw.substring(2);
+                    IMEI = device_IMEI;
                     //send 1 if allowed. Future DB lookup
                     CLIENT.write(new Buffer.from([0x01]));
 
@@ -67,6 +69,8 @@ SERVER.on(
                             // console.log('Closing connection.......');
                         }
                     );
+
+                    console.log('Device ime is: ' + IMEI);
                     // returning the length of received records preceded by 3 zeroes to the client (device)
                     CLIENT.write(length);
                 }
