@@ -9,6 +9,8 @@ const   TCP_DECODER = require('../services/tcpdecoder');
 const   SERVER                  = NET_MODULE.createServer();
 const   SENDER                  = require('../services/sender');
 
+var decimalToBinary = require("decimal-to-binary");
+
 // stingray RMQ servise url for testing purposes
 // "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh"
 
@@ -49,10 +51,9 @@ SERVER.on(
                  var decoded_data = decoded.decode_AVL();
 
                 console.log(decoded_data.number_of_data2)
-                var length = new Buffer.from([decoded_data.number_of_data2]);
-
+                var length = new Buffer.from([0x00, 0x00, 0x00, decoded_data.number_of_data2]);
+                console.log(length);
                 
-
 
                 // check if device is trying to authenticate
                 if(decoded.isDeviceAuthenticating())

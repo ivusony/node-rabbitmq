@@ -50,10 +50,19 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
                             {
                                 return console.log(err);
                             }
-                            console.log('Data received. Data.json appended');
+
+                            var data = decoder.decode_AVL(),
+                                timestamps = [];
+
+                            data.records.forEach(record => {
+                                timestamps.push(record.timestamp)
+                            })
+
+                            console.log(`Received ${data.records.length} records, with following timestamps: `);
+                            console.log(timestamps);
                         })
                         // console.log(decoder.decode_AVL());
-            
+
                     }
                 }, {
                     noAck: true
