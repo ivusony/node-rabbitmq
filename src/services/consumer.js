@@ -58,7 +58,7 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
                                 timestamps.push(record.timestamp)
                             })
 
-                            console.log(`Received ${data.records.length} records, with following timestamps: `);
+                            console.log(`${Date.now()} => Received ${data.records.length} records, with following timestamps: `);
                             console.log(timestamps);
                         })
                         // console.log(decoder.decode_AVL());

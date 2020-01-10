@@ -9,8 +9,6 @@ const   TCP_DECODER = require('../services/tcpdecoder');
 const   SERVER                  = NET_MODULE.createServer();
 const   SENDER                  = require('../services/sender');
 
-var decimalToBinary = require("decimal-to-binary");
-
 // stingray RMQ servise url for testing purposes
 // "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh"
 
@@ -36,55 +34,42 @@ SERVER.on(
         }
         // CONNECTED_CLIENTS.push(NEW_CLIENT);
 
-        console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-        console.log(`New connection from ${NEW_CLIENT.ADDRESS}:${NEW_CLIENT.PORT}`);
+        // console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        // console.log(`New connection from ${NEW_CLIENT.ADDRESS}:${NEW_CLIENT.PORT}`);
 
-    
-
+        // SOCKET sending data
         CLIENT.on(
             "data", 
             data => {
-
-              
-                var decoded = new TCP_DECODER(data);
-
-                 var decoded_data = decoded.decode_AVL();
-
-                console.log(decoded_data.number_of_data2)
+                var decoded         = new TCP_DECODER(data),
+                    decoded_data    = decoded.decode_AVL();
+                // the data record array length preceded by 3 bytes of zero
                 var length = new Buffer.from([0x00, 0x00, 0x00, decoded_data.number_of_data2]);
-                console.log(length);
-                
-
-                // check if device is trying to authenticate
+                // when module connects to server, module sends its IMEI. First comes short identifying number of bytes written and then goes IMEI as text (bytes). 
+                // First two bytes denote IMEI length.
                 if(decoded.isDeviceAuthenticating())
                 {
                     var IMEI_raw = data.toString();
                     var device_IMEI = IMEI_raw.substring(2);
-
-                    //send 1 if allowed
+                    //send 1 if allowed. Future DB lookup
                     CLIENT.write(new Buffer.from([0x01]));
 
                 }else{                    
-
+                    //the actual DATA stream. Sending to RMQ exhange
                     SEND_TO_EXCHANGE(
                         "f1-listener",
                         //buffer to string
                         data,
                         (data_sent) => {
-                            console.log(`Message sent is below:`);
+                            // console.log(`Message sent is below:`);
                             // console.log(decoded_data);
                             // console.log('To string:' + data_sent);
-                            console.log('Closing connection.......');
+                            // console.log('Closing connection.......');
                         }
                     );
-
-
+                    // returning the length of received records preceded by 3 zeroes to the client (device)
                     CLIENT.write(length);
-                   
-
                 }
-
-
             }
         );
 

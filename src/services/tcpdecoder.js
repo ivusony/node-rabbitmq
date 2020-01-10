@@ -11,7 +11,7 @@ class TCP_DECODER {
         // First two bytes denote IMEI length.
         var first_two_Bytes = this.hex_data.slice(0, 2).toString('hex');
         var int = parseInt(first_two_Bytes, 16);
-        // return true if first two bytes (IMEI length) is greater than 0
+        // return true if first two bytes (IMEI length) is greater than 0, because AVL data begins with 7 zeroes
         return int > 0
     }
 
