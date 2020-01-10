@@ -7,3 +7,7 @@
 * Consumer in /services/consumer.js connects to remote exhange/queue and consumes the messages
 
 * Fake FMB140 socket in Test used for fakeing IMEI => AVL communication with server 
+
+
+* requires NPM and NODEJS
+* npm install  && node listener.js || node consumer.js
