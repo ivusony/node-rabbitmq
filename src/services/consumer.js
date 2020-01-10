@@ -43,7 +43,10 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
                         // console.log(msg.content);
                        
 
-                        var decoder = new TCP_DECODER(msg.content);
+                        var IMEI = msg.content.slice(0, 17).toString().substring(2);
+                        var AVL = msg.content.slice(17, msg.content.length)
+
+                        var decoder = new TCP_DECODER(AVL);
 
                         fs.writeFile('../test/data.json', JSON.stringify(decoder.decode_AVL()) , function(err) {
                             if(err)
@@ -58,7 +61,7 @@ AMQP.connect(CONN_URL, (err, CONNECTION) => {
                             //     timestamps.push(record.timestamp)
                             // })
 
-                            console.log("Teltonika FMB140 record:");
+                            console.log("Teltonika FMB140 with IMEI " + IMEI + " record:");
                             console.log(data);
                         })
                         // console.log(decoder.decode_AVL());

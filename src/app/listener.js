@@ -38,10 +38,12 @@ SERVER.on(
         // console.log(`New connection from ${NEW_CLIENT.ADDRESS}:${NEW_CLIENT.PORT}`);
 
         // SOCKET sending data
+        var IMEI = undefined, AVL = undefined;
+
         CLIENT.on(
             "data", 
             data => {
-                var IMEI = undefined;
+                
                 var decoded         = new TCP_DECODER(data),
                     decoded_data    = decoded.decode_AVL();
                 // the data record array length preceded by 3 bytes of zero
@@ -50,18 +52,23 @@ SERVER.on(
                 // First two bytes denote IMEI length.
                 if(decoded.isDeviceAuthenticating())
                 {
+                    IMEI = data;
+                    console.log(IMEI);
                     var IMEI_raw = data.toString();
                     var device_IMEI = IMEI_raw.substring(2);
-                    IMEI = device_IMEI;
+                    
                     //send 1 if allowed. Future DB lookup
                     CLIENT.write(new Buffer.from([0x01]));
 
-                }else{                    
+                }else{               
+                    var totalBufferLength = IMEI.length + data.length;
                     //the actual DATA stream. Sending to RMQ exhange
+
                     SEND_TO_EXCHANGE(
                         "f1-listener",
                         //buffer to string
-                        data,
+                        new Buffer.concat([IMEI, data], totalBufferLength),
+                        //  data,
                         (data_sent) => {
                             // console.log(`Message sent is below:`);
                             // console.log(decoded_data);
