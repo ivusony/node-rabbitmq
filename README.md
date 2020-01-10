@@ -1,7 +1,13 @@
  # NODEJS Listener service for F1 project.
 
-* main server file /app/listener.js
+* main server/listener script /app/listener.js
 
-* sender function in /services/sender.js which actually sends messages to exchange/queue. Imported in listener
+* Listener uses Sender  in /services/sender.js which sends messages to exchange/queue.
 
-* consumer function in /services/consumer.js which connects to remote exhange/queue and consumes the messages
+* Consumer in /services/consumer.js connects to remote exhange/queue and consumes the messages
+
+* Fake FMB140 socket in Test used for fakeing IMEI => AVL communication with server 
+
+
+* requires NPM and NODEJS
+* npm install  && node listener.js || node consumer.js
