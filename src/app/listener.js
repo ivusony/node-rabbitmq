@@ -17,9 +17,8 @@ const   SENDER                  = require('../services/sender');
 const   SEND_TO_EXCHANGE = SENDER(
             {
                 // cloud test rmq
-                // RMQ_URL: "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh"
-                // harpia.sattrakt.net RMQ
-                RMQ_URL: "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
+                RMQ_URL: "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh"
+                
             }
         );
 

@@ -4,8 +4,7 @@ const TCP_DECODER = require('../services/tcpdecoder');
 
 const fs = require('fs');
 
-// const CONN_URL = "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh";
-const CONN_URL = "amqp://admin:xmmA2dYyfZUBZdm8dpD7xubt@harpia.sattrakt.net:30005"
+const CONN_URL = "amqp://mnresdlh:GLyLJTCLkbe8tDiAvsuZZs-_paQ6LeMj@stingray.rmq.cloudamqp.com/mnresdlh";
 
 AMQP.connect(CONN_URL, (err, CONNECTION) => {
 

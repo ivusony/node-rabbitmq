@@ -1,6 +1,6 @@
-FROM gitlab.sattrakt.net:5001/images/nodejs-alpine:13.2.0
+#FROM need to be updated
 
-MAINTAINER SAT-TRAKT D.O.O. <webmaster@stcable.net>
+FROM mhart/alpine-node:latest
 
 RUN mkdir /var/ms-listener
 
