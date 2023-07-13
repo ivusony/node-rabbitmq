@@ -9,7 +9,7 @@
   "author": "radulov",
   "license": "ISC",
   "dependencies": {
-    "amqplib": "^0.5.5",
+    "amqplib": "^0.10.3",
     "binutils64": "^0.1.2",
     "crc": "^3.8.0",
     "decimal-to-binary": "^1.0.3",
